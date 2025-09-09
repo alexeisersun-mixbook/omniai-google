@@ -294,5 +294,28 @@ RSpec.describe OmniAI::Google::Chat::Stream do
         ])
       end
     end
+
+    context "when content is without parts" do
+      let(:chunks) do
+        [
+          {
+            candidates: [
+              {
+                content: {
+                  role: "model",
+                  parts: nil,
+                },
+                index: 0,
+              },
+            ],
+          },
+        ].map { |chunk| "data: #{JSON.generate(chunk)}\n\n" }
+      end
+
+      it "handles content without parts" do
+        stream!
+        expect(deltas).to eql([])
+      end
+    end
   end
 end
